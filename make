@@ -1,7 +1,7 @@
 #!/usr/bin/env raku
 
-constant $readme-src = "lib/My/Module.rakumod";
-constant $github-repo = 'bduggan/raku-my-module';
+constant $readme-src = "lib/Duck/CSV.rakumod";
+constant $github-repo = 'bduggan/raku-duck-csv';
 
 if %*ENV<VERBOSE> {
   &shell.wrap: -> |c { say c.raku; callsame; }
