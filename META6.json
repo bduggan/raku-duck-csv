@@ -1,0 +1,23 @@
+{
+  "name" : "Duck::CSV",
+  "authors" : [
+    "Brian Duggan"
+  ],
+  "provides" : {
+    "Duck::CSV" : "lib/Duck/CSV.rakumod"
+  },
+  "build-depends" : [ ],
+  "depends" : [
+    "Duckie"
+  ],
+  "description" : "Harness the duckdb csv parser for fast csv parsing",
+  "tags" : [
+    "csv"
+  ],
+  "license" : "MIT",
+  "raku" : "6.*",
+  "version" : "0.0.1",
+  "auth" : "zef:bduggan",
+  "source-url" : "git://github.com/bduggan/raku-duck-csv.git"
+}
+

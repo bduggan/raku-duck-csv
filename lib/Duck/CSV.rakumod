@@ -50,7 +50,7 @@ The path to the CSV file.
 
 sub read-csv(Str $file) is export {
   my $db = Duckie.new;
-  my $q = $db.query: "select * from '$file'";
+  my $q = $db.query: "select * from read_csv('$file')";
   my @rows = $q.rows;
   return @rows;
 }
