@@ -11,15 +11,15 @@ Duck::CSV - Read CSV files using DuckDB
 
     use Duck::CSV;
 
-    my @rows = read-csv("mydata.csv");
+    my @rows = read-csv "mydata.csv";
     for @rows -> $row {
         say $row.join(",");
     }
 
 =head1 DESCRIPTION
 
-This module provides a simple way to read CSV files into Raku using DuckDB.
-It uses the DuckDB SQL engine to efficiently parse and query CSV data.
+This module exports a single function `read-csv` that parses a CSV file.
+It uses duckdb for the parsing, and is basically equivalent to `select * from read_csv('file.csv')`.
 
 =head1 SUBROUTINES
 
