@@ -1,0 +1,79 @@
+use Test;
+use Duck::CSV;
+
+plan 24;
+
+# Test 1: Basic CSV with headers
+my $temp_file_1 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-basic-{now}.csv");
+spurt $temp_file_1, "name,age,city\nJohn,30,Boston\nJane,25,Seattle";
+my @rows_1 = read-csv($temp_file_1.Str);
+is @rows_1.elems, 2, 'Basic CSV should have 2 data rows';
+is @rows_1[0]<name>, 'John', 'First row name should be John';
+is @rows_1[0]<age>, '30', 'First row age should be 30';
+is @rows_1[1]<city>, 'Seattle', 'Second row city should be Seattle';
+
+# Test 2: CSV with numeric data  
+my $temp_file_2 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-numeric-{now}.csv");
+spurt $temp_file_2, "int,float,scientific\n42,3.14,1.23e-4\n-17,2.71828,6.02e+23";
+my @rows_2 = read-csv($temp_file_2.Str);
+is @rows_2.elems, 2, 'Numeric CSV should have 2 data rows';
+is @rows_2[0]<int>, '42', 'Integer should be stored as string';
+is @rows_2[0]<float>, '3.14', 'Float should be stored as string';
+is @rows_2[1]<scientific>, '6.02e+23', 'Scientific notation should be preserved';
+
+# Test 3: CSV with quoted fields containing commas
+my $temp_file_3 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-quoted-{now}.csv");
+spurt $temp_file_3, q{name,description,price} ~ "\n" ~ q{"John Smith","A person, obviously",100};
+my @rows_3 = read-csv($temp_file_3.Str);
+is @rows_3.elems, 1, 'Quoted CSV should have 1 data row';
+is @rows_3[0]<name>, 'John Smith', 'Quoted name should be correct';
+is @rows_3[0]<description>, 'A person, obviously', 'Quoted field with comma should be parsed correctly';
+
+# Test 4: CSV with empty fields
+my $temp_file_4 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-empty-{now}.csv");
+spurt $temp_file_4, "name,middle,last\nJohn,,Doe\n,Jane,Smith";
+my @rows_4 = read-csv($temp_file_4.Str);
+is @rows_4.elems, 2, 'CSV with empty fields should have 2 data rows';
+is @rows_4[0]<middle>, Any, 'Empty middle field should be empty string';
+is @rows_4[1]<name>, Any, 'Empty first field should be empty string';
+
+# Test 5: CSV with special characters
+my $temp_file_5 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-special-{now}.csv");
+spurt $temp_file_5, "name,symbol\nCopyright,©\nTrademark,™";
+my @rows_5 = read-csv($temp_file_5.Str);
+is @rows_5.elems, 2, 'Special chars CSV should have 2 data rows';
+is @rows_5[0]<symbol>, '©', 'Copyright symbol should be preserved';
+is @rows_5[1]<symbol>, '™', 'Trademark symbol should be preserved';
+
+# Test 6: Empty CSV file
+my $temp_file_6 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-empty-{now}.csv");
+spurt $temp_file_6, '';
+my @rows_6 = read-csv($temp_file_6.Str);
+is @rows_6.elems, 0, 'Empty file should return empty array';
+
+# Test 7: CSV with only headers
+my $temp_file_7 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-headers-{now}.csv");
+spurt $temp_file_7, "name,age,city";
+my @rows_7 = read-csv($temp_file_7.Str);
+is @rows_7.elems, 0, 'Headers-only CSV should have 0 data rows';
+
+# Test 8: CSV with Windows line endings
+my $temp_file_8 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-windows-{now}.csv");
+spurt $temp_file_8, "name,age\r\nJohn,30\r\nJane,25";
+my @rows_8 = read-csv($temp_file_8.Str);
+is @rows_8.elems, 2, 'Windows line endings CSV should have 2 data rows';
+is @rows_8[0]<name>, 'John', 'First row with CRLF should parse correctly';
+is @rows_8[1]<age>, '25', 'Second row with CRLF should parse correctly';
+
+# Test 9: Large CSV file
+my $temp_file_9 will leave { .unlink if .e } = $*TMPDIR.add("duck-csv-test-large-{now}.csv");
+my $csv_content = "id,value\n";
+for 1..100 -> $i {
+    $csv_content ~= "$i,value$i\n";
+}
+spurt $temp_file_9, $csv_content;
+my @rows_9 = read-csv($temp_file_9.Str);
+is @rows_9.elems, 100, 'Large CSV should have 100 data rows';
+is @rows_9[49]<id>, '50', 'Middle row should have correct ID';
+
+done-testing;
