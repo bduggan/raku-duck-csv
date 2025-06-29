@@ -10,7 +10,7 @@
   "depends" : [
     "Duckie"
   ],
-  "description" : "Harness the duckdb csv parser for fast csv parsing",
+  "description" : "Fast CSV parsing using DuckDB",
   "tags" : [
     "csv"
   ],
