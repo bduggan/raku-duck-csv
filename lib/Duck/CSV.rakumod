@@ -19,15 +19,18 @@ Duck::CSV - Read CSV files using DuckDB
 =head1 DESCRIPTION
 
 This module exports a single function `read-csv` that parses a CSV file.
-It uses duckdb for the parsing, and is basically equivalent to `select * from read_csv('file.csv')`.
+It uses duckdb for the parsing, and is equivalent to `select * from read_csv('file.csv')`.
 
 =head1 SUBROUTINES
 
 =head2 read-csv
 
-    sub read-csv(Str $file)
+    multi sub read-csv(Str $file)
+    multi sub read-csv(IO::Path $file)
 
 Reads a CSV file and returns an array of rows. Each row is an array of strings representing the values in the CSV.
+
+The parameter can be either a string representing the file path or an `IO::Path` object.
 
 =item file
 
@@ -46,9 +49,17 @@ The path to the CSV file.
         say $row.join(",");
     }
 
+=head1 TODO
+
+Support all the options of `read_csv` in DuckDB, such as `header`, `delim`, etc.
+
 =end pod
 
-sub read-csv(Str $file) is export {
+multi read-csv(Str $file) is export {
+  read-csv $file.IO;
+}
+
+multi read-csv(IO::Path $file) is export {
   my $db = Duckie.new;
   my $q = $db.query: "select * from read_csv('$file')";
   my @rows = $q.rows;
