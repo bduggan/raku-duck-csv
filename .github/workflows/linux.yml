@@ -14,8 +14,12 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
+        duckdb-version:
+          - '1.0.0'
+          - '1.1.0'
+          - '1.1.1'
         raku-version:
-          - '2024.05'
+          - '2025.01'
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
@@ -23,12 +27,12 @@ jobs:
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}
+      - name: Install Dependencies
+        run: zef install --deps-only .
       - name: Install native deps
         run: |
           wget https://github.com/duckdb/duckdb/releases/download/v${{ matrix.duckdb-version }}/libduckdb-linux-amd64.zip
           unzip libduckdb-linux-amd64.zip
           sudo cp libduckdb.so /usr/lib
-      - name: Install Dependencies
-        run: zef install --deps-only .
       - name: Run Tests
-        run: zef test -v .
+        run: raku ./make -v test
