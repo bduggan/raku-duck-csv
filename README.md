@@ -11,7 +11,7 @@ SYNOPSIS
 
     use Duck::CSV;
 
-    my @rows = read-csv("mydata.csv");
+    my @rows = read-csv "mydata.csv";
     for @rows -> $row {
         say $row.join(",");
     }
@@ -19,7 +19,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-This module provides a simple way to read CSV files into Raku using DuckDB. It uses the DuckDB SQL engine to efficiently parse and query CSV data.
+This module exports a single function `read-csv` that parses a CSV file. It uses duckdb for the parsing, and is equivalent to `select * from read_csv('file.csv')`.
 
 SUBROUTINES
 ===========
@@ -27,9 +27,12 @@ SUBROUTINES
 read-csv
 --------
 
-    sub read-csv(Str $file)
+    multi sub read-csv(Str $file)
+    multi sub read-csv(IO::Path $file)
 
 Reads a CSV file and returns an array of rows. Each row is an array of strings representing the values in the CSV.
+
+The parameter can be either a string representing the file path or an `IO::Path` object.
 
   * file
 
@@ -48,4 +51,9 @@ EXAMPLE
     for @rows -> $row {
         say $row.join(",");
     }
+
+TODO
+====
+
+Support all the options of `read_csv` in DuckDB, such as `header`, `delim`, etc.
 
