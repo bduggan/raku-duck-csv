@@ -11,15 +11,22 @@ Duck::CSV - Read CSV files using DuckDB
 
     use Duck::CSV;
 
-    my @rows = read-csv "mydata.csv";
+    my @rows = read-csv($*TMPDIR.child("data.csv"));
+
     for @rows -> $row {
-        say $row.join(",");
+        say "Row: " ~ ++$;
+        for $row.keys -> $key {
+            say "  $key: {$row{$key}}";
+        }
     }
 
 =head1 DESCRIPTION
 
 This module exports a single function `read-csv` that parses a CSV file.
 It uses duckdb for the parsing, and is equivalent to `select * from read_csv('file.csv')`.
+Rows are returns as hashes; the keys are column names taken from the first row of the CSV file.
+
+More options are coming soon.
 
 =head1 SUBROUTINES
 
