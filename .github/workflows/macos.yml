@@ -28,6 +28,6 @@ jobs:
           unzip libduckdb-osx-universal.zip
           ls -l libduckdb.dylib
       - name: Install Dependencies
-        run: zef install --deps-only .
+        run: DYLD_LIBRARY_PATH=. zef install --deps-only .
       - name: Run Tests
         run: DYLD_LIBRARY_PATH=. raku ./make -v test
