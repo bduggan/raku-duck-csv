@@ -5,7 +5,7 @@ use Duckie;
 
 =head1 NAME
 
-Duck::CSV - Read CSV files using DuckDB
+Duck::CSV - Fast CSV parsing using DuckDB
 
 =head1 SYNOPSIS
 
@@ -27,6 +27,8 @@ It uses duckdb for the parsing, and is equivalent to `select * from read_csv('fi
 Rows are returns as hashes; the keys are column names taken from the first row of the CSV file.
 
 More options are coming soon.
+
+DuckDB's CSV parser is really fast!
 
 =head1 SUBROUTINES
 
@@ -56,9 +58,17 @@ The path to the CSV file.
         say $row.join(",");
     }
 
+=head1 SEE ALSO
+
+https://duckdb.org/2025/04/16/duckdb-csv-pollock-benchmark.html
+
 =head1 TODO
 
 Support all the options of `read_csv` in DuckDB, such as `header`, `delim`, etc.
+
+=head1 AUTHOR
+
+Brian Duggan
 
 =end pod
 

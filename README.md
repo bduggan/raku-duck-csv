@@ -4,7 +4,7 @@
 NAME
 ====
 
-Duck::CSV - Read CSV files using DuckDB
+Duck::CSV - Fast CSV parsing using DuckDB
 
 SYNOPSIS
 ========
@@ -26,6 +26,8 @@ DESCRIPTION
 This module exports a single function `read-csv` that parses a CSV file. It uses duckdb for the parsing, and is equivalent to `select * from read_csv('file.csv')`. Rows are returns as hashes; the keys are column names taken from the first row of the CSV file.
 
 More options are coming soon.
+
+DuckDB's CSV parser is really fast!
 
 SUBROUTINES
 ===========
@@ -58,8 +60,18 @@ EXAMPLE
         say $row.join(",");
     }
 
+SEE ALSO
+========
+
+https://duckdb.org/2025/04/16/duckdb-csv-pollock-benchmark.html
+
 TODO
 ====
 
 Support all the options of `read_csv` in DuckDB, such as `header`, `delim`, etc.
+
+AUTHOR
+======
+
+Brian Duggan
 
