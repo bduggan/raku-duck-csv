@@ -37,13 +37,9 @@ DuckDB's CSV parser is really fast!
     multi sub read-csv(Str $file)
     multi sub read-csv(IO::Path $file)
 
-Reads a CSV file and returns an array of rows. Each row is an array of strings representing the values in the CSV.
+Reads a CSV file and returns an array of rows. Rows are hashes; keys are column names from the first row of the CSV file.
 
 The parameter can be either a string representing the file path or an `IO::Path` object.
-
-=item file
-
-The path to the CSV file.
 
 =head1 EXAMPLE
 
