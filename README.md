@@ -11,7 +11,7 @@ SYNOPSIS
 
     use Duck::CSV;
 
-    my @rows = read-csv($*TMPDIR.child("data.csv"));
+    my @rows = read-csv "data.csv";
 
     for @rows -> $row {
         say "Row: " ~ ++$;
